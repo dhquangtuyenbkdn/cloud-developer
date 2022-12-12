@@ -73,10 +73,10 @@ custom:
         description: Serverless application for todo liss
     models:
       - name: CreateTodoRequest
-        contentType: application/json
+        contentType: "application/json"
         schema: ${file(models/create-todo-model.json)}
       - name: UpdateTodoRequest
-        contentType: application/json
+        contentType: "application/json"
         schema: ${file(models/update-todo-model.json)}
 
 functions:
