@@ -16,6 +16,7 @@ const jwksUrl = 'https://tuyendhq.us.auth0.com/.well-known/jwks.json'
 
 export const handler = async (event: CustomAuthorizerEvent): Promise<CustomAuthorizerResult> => {
   logger.info('Authorizing a user', event.authorizationToken)
+  logger.info('user request path', event.path)
   try {
     const jwtToken = await verifyToken(event.authorizationToken)
     logger.info('User was authorized', jwtToken)
@@ -54,25 +55,38 @@ export const handler = async (event: CustomAuthorizerEvent): Promise<CustomAutho
 
 async function verifyToken(authHeader: string): Promise<JwtPayload> {
   const token = getToken(authHeader)
-  
-  if (!token) throw new Error('Invalid authentication token')
+
+  if (!token) {
+    logger.error('Authorizing a user', token)
+
+    throw new Error('Invalid authentication token')
+  }
 
   // const jwt: Jwt = decode(token, { complete: true }) as Jwt
   const certInfo = await getCertificate();
 
+  logger.info('[verifyToken] try to verify token with cert: ', certInfo)
   const jwtToken = verify(token, certInfo, { algorithms: ['RS256'] }) as JwtPayload;
+  logger.info('[verifyToken] jwtToken: ', jwtToken)
+
   return jwtToken
 }
 
 function getToken(authHeader: string): string {
-  if (!authHeader) throw new Error('No authentication header')
+  if (!authHeader) {
+    logger.error('No authentication header')
+    throw new Error('No authentication header')
+  }
 
-  if (!authHeader.toLowerCase().startsWith('bearer '))
+  if (!authHeader.toLowerCase().startsWith('bearer ')) {
+    logger.error('Invalid authentication header')
     throw new Error('Invalid authentication header')
+  }
 
   const split = authHeader.split(' ')
   const token = split[1];
 
+  logger.info('[getToken] User token', token)
   return token;
 }
 

@@ -56,13 +56,13 @@ export async function updateTodo(
 
 export async function deleteTodo(
     todoId: string,
-    //jwtToken: string
+    jwtToken: string
 ): Promise<string> {
 
     //const itemId = uuid.v4();
-    //const userId = parseUserId(jwtToken)
+    const userId = parseUserId(jwtToken)
 
-    return await todoAccess.deleteTodo(todoId);
+    return await todoAccess.deleteTodo(userId, todoId);
 }
 
 export function createAttachmentPresignedUrl(todoId: string): string {

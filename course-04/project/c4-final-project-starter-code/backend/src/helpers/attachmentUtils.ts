@@ -7,10 +7,10 @@ const s3 = new XAWS.S3({
 });
 
 export class AttachmentUtils {
-    private readonly bucketName = process.env.IMAGES_S3_BUCKET;
-    private readonly urlExpiration = process.env.SIGNED_URL_EXPIRATION;
 
-    constructor() {
+    constructor(
+        private readonly bucketName = process.env.ATTACHMENT_S3_BUCKET,
+        private readonly urlExpiration = process.env.SIGNED_URL_EXPIRATION) {
     }
 
     createAttachmentPresignedUrl(todoId: string): string {

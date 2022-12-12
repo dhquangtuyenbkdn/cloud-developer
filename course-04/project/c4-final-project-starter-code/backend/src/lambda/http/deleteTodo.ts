@@ -9,15 +9,16 @@ import { deleteTodo } from '../../businessLogic/todos'
 export const handler = middy(
   async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     const todoId = event.pathParameters.todoId
+    
+    const authorization = event.headers.Authorization
+    const split = authorization.split(' ')
+    const jwtToken = split[1]
+
     // TODO: Remove a TODO item by id
-    deleteTodo(todoId);
-    await deleteTodo(todoId)
+    await deleteTodo(todoId, jwtToken)
 
     return {
       statusCode: 200,
-      headers: {
-        'Access-Control-Allow-Origin': '*'
-      },
       body: JSON.stringify({
         todoId: todoId
       })
