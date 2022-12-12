@@ -121,7 +121,7 @@ functions:
             summary: Create todo
             description: Create todo
             requestModels:
-              application/json: CreateTodoRequest
+              "application/json": CreateTodoRequest
     iamRoleStatements:
       - Effect: Allow
         Action:
@@ -143,7 +143,7 @@ functions:
             summary: Update todo
             description: Update todo
             requestModels:
-              application/json: UpdateTodoRequest
+              "application/json": UpdateTodoRequest
     iamRoleStatements:
       - Effect: Allow
         Action:
