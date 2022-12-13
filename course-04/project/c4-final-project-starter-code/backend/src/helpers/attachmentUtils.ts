@@ -16,8 +16,12 @@ export class AttachmentUtils {
     createAttachmentPresignedUrl(todoId: string): string {
         return s3.getSignedUrl('putObject', {
             Bucket: this.bucketName,
-            Key: todoId,
+            Key: `${todoId}/image.png`,
             Expires: this.urlExpiration
         })
+    }  
+    
+    getAttachmentUrl(todoId: string): string {
+        return `https://${this.bucketName}.s3.amazonaws.com/${todoId}/image.png`
     }
 }

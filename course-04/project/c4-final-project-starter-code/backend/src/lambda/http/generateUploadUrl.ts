@@ -13,7 +13,12 @@ export const handler = middy(
   async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     const todoId = event.pathParameters.todoId
     logger.info('createAttachmentPresignedUrl for id: ' + todoId);
-    const uploadUrl = createAttachmentPresignedUrl(todoId)
+
+    const authorization = event.headers.Authorization
+    const split = authorization.split(' ')
+    const jwtToken = split[1]
+
+    const uploadUrl = createAttachmentPresignedUrl(todoId, jwtToken)
 
     return {
       statusCode: 202,

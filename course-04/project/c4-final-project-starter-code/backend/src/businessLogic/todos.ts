@@ -62,6 +62,11 @@ export async function deleteTodo(
     return await todoAccess.deleteTodo(userId, todoId);
 }
 
-export function createAttachmentPresignedUrl(todoId: string): string {
-    return attachmentUtils.createAttachmentPresignedUrl(todoId);
+export function createAttachmentPresignedUrl(todoId: string, jwtToken: string): string {
+    const userId = parseUserId(jwtToken)
+    const attachmentPresignedUrl = attachmentUtils.createAttachmentPresignedUrl(todoId);
+    const attachmentUrl = attachmentUtils.getAttachmentUrl(todoId);
+    todoAccess.updateattachmentUrl(todoId, userId, attachmentUrl);
+    
+    return attachmentPresignedUrl;
 }

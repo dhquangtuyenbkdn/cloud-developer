@@ -49,6 +49,7 @@ export class TodosAccess {
 
     async createTodo(todo: TodoItem): Promise<TodoItem> {
         logger.info("createTodo todo: " + todo.userId)
+
         await this.docClient.put({
             TableName: this.todosTable,
             Item: todo
@@ -79,6 +80,26 @@ export class TodosAccess {
         }).promise()
 
         return todoUpdate
+    }
+
+    async updateattachmentUrl(todoId: string, userId: string, attachmentUrl: string): Promise<void> {
+        logger.info("updateattachmentUrl for: " + todoId)
+
+        await this.docClient.update({
+            TableName: this.todosTable,
+            Key: {
+                todoId: todoId,
+                userId: userId
+            },
+            UpdateExpression: "set #attachmentUrl = :attachmentUrl",
+            ExpressionAttributeNames: {
+                '#attachmentUrl': 'attachmentUrl'
+            },
+            ExpressionAttributeValues: {
+                ':attachmentUrl': attachmentUrl
+            }
+        }).promise()
+
     }
 
     async deleteTodo(userId: string, todoId: string): Promise<string> {
