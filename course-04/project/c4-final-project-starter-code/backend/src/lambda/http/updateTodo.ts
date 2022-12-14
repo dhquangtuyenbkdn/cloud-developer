@@ -7,19 +7,17 @@ import { cors, httpErrorHandler } from 'middy/middlewares'
 import { updateTodo } from '../../businessLogic/todos'
 import { UpdateTodoRequest } from '../../requests/UpdateTodoRequest'
 import { createLogger } from '../../utils/logger'
+import { getUserId } from '../utils'
 
 const logger = createLogger('auth')
 export const handler = middy(
   async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     const todoId = event.pathParameters.todoId
-    
-    const authorization = event.headers.Authorization
-    const split = authorization.split(' ')
-    const jwtToken = split[1]
+    const userId = getUserId(event)
     const updatedTodo: UpdateTodoRequest = JSON.parse(event.body)
 
     logger.info('update todo: ' + updatedTodo);
-    await updateTodo(todoId, updatedTodo, jwtToken)
+    await updateTodo(todoId, userId, updatedTodo)
     // TODO: Update a TODO item with the provided id using values in the "updatedTodo" object
 
     return {

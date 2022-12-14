@@ -83,7 +83,7 @@ export class TodosAccess {
     }
 
     async updateattachmentUrl(todoId: string, userId: string, attachmentUrl: string): Promise<void> {
-        logger.info("updateattachmentUrl for: " + todoId)
+        logger.info(`updateattachmentUrl for: ${userId}, ${todoId}, ${attachmentUrl}`)
 
         await this.docClient.update({
             TableName: this.todosTable,
@@ -99,10 +99,9 @@ export class TodosAccess {
                 ':attachmentUrl': attachmentUrl
             }
         }).promise()
-
     }
 
-    async deleteTodo(userId: string, todoId: string): Promise<string> {
+    async deleteTodo(todoId: string, userId: string): Promise<string> {
         await this.docClient.delete({
             TableName: this.todosTable,
             Key: {

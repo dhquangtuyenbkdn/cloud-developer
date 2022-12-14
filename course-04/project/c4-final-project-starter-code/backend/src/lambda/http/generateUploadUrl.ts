@@ -6,6 +6,7 @@ import { cors, httpErrorHandler } from 'middy/middlewares'
 
 import { createAttachmentPresignedUrl } from '../../businessLogic/todos'
 import { createLogger } from '../../utils/logger'
+import { getUserId } from '../utils'
 
 const logger = createLogger('auth')
 
@@ -14,11 +15,9 @@ export const handler = middy(
     const todoId = event.pathParameters.todoId
     logger.info('createAttachmentPresignedUrl for id: ' + todoId);
 
-    const authorization = event.headers.Authorization
-    const split = authorization.split(' ')
-    const jwtToken = split[1]
+    const userId = getUserId(event)
 
-    const uploadUrl = createAttachmentPresignedUrl(todoId, jwtToken)
+    const uploadUrl = createAttachmentPresignedUrl(todoId, userId)
 
     return {
       statusCode: 202,
