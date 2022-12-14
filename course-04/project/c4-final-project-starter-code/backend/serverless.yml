@@ -7,14 +7,15 @@ plugins:
   - serverless-iam-roles-per-function
   - serverless-plugin-tracing
   - serverless-reqvalidator-plugin
-  - serverless-aws-documentation
+  - serverless-offline
+  #- serverless-aws-documentation
 
 package:
   individually: false
 
 provider:
   name: aws
-  runtime: nodejs14.x
+  runtime: nodejs12.x
   lambdaHashingVersion: '20201221'
 
   stage: ${opt:stage, 'dev'}
@@ -39,30 +40,30 @@ provider:
     
    
   #iamRoleStatements:
-  #  - Effect: Allow
-  #    Action:
-  #      - codedeploy:*
-  #    Resource:
-  #      - '*'
-  #  - Effect: Allow
-  #    Action:
-  #      - dynamodb:Scan
-  #      - dynamodb:PutItem
-  #      - dynamodb:GetItem
-  #      - dynamodb:Scan
-  #      - dynamodb:DeleteItem
-  #    Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
-  #  - Effect: Allow
-  #    Action:
-  #      - s3:PutObject
-  #      - s3:GetObject
-  #      - s3:DeleteObject
-  #    Resource: arn:aws:s3:::${self:provider.environment.ATTACHMENT_S3_BUCKET}/*
-  #  - Effect: Allow
-  #    Action:
-  #    - xray:PutTelemetryRecords
-  #    - xray:PutTraceSegments
-  #    Resource: "*"
+  # - Effect: Allow
+  #   Action:
+  #     - codedeploy:*
+  #   Resource:
+  #     - '*'
+  # - Effect: Allow
+  #   Action:
+  #     - dynamodb:Scan
+  #     - dynamodb:PutItem
+  #     - dynamodb:GetItem
+  #     - dynamodb:Scan
+  #     - dynamodb:DeleteItem
+  #   Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
+  # - Effect: Allow
+  #   Action:
+  #     - s3:PutObject
+  #     - s3:GetObject
+  #     - s3:DeleteObject
+  #   Resource: arn:aws:s3:::${self:provider.environment.ATTACHMENT_S3_BUCKET}/*
+  # - Effect: Allow
+  #   Action:
+  #   - xray:PutTelemetryRecords
+  #   - xray:PutTraceSegments
+  #   Resource: "*"
   iam:
     role:
       statements:
@@ -91,49 +92,49 @@ provider:
           - xray:PutTraceSegments
           Resource: "*"
 
-custom:
-  documentation:
-    api:
-      info:
-        version: v1.0.0
-        title: Serverless API
-        description: Serverless application for todo liss
-    models:
-      - name: "CreateTodoRequest"
-        description: "CreateTodoRequest document"
-        contentType: "application/json"
-        schema: ${file(models/create-todo-model.json)}
-        
-      #- name: "CreateTodoRequest"
-      #  contentType: "application/json"
-      #  schema:
-      #    required: 
-      #      - name
-      #      - dueDate
-      #    properties:
-      #      name:
-      #        type: string
-      #      dueDate:
-      #        type: string
-      - name: "UpdateTodoRequest"
-        description: "UpdateTodoRequest document"
-        contentType: "application/json"
-        schema: ${file(models/update-todo-model.json)}
-        
-      #- name: "UpdateTodoRequest2"
-      #  schema:
-      #    type: object
-      #    required: 
-      #      - name
-      #      - dueDate
-      #      - done
-      #    properties:
-      #      name:
-      #        type: string
-      #      dueDate:
-      #        type: string
-      #      done:
-      #        type: boolean
+#custom:
+#  documentation:
+#    api:
+#      info:
+#        version: v1.0.0
+#        title: Serverless API
+#        description: Serverless application for todo liss
+#    models:
+#      - name: "CreateTodoRequest"
+#        description: "CreateTodoRequest document"
+#        contentType: "application/json"
+#        schema: ${file(models/create-todo-model.json)}
+#        
+#      #- name: "CreateTodoRequest"
+#      #  contentType: "application/json"
+#      #  schema:
+#      #    required: 
+#      #      - name
+#      #      - dueDate
+#      #    properties:
+#      #      name:
+#      #        type: string
+#      #      dueDate:
+#      #        type: string
+#      - name: "UpdateTodoRequest"
+#        description: "UpdateTodoRequest document"
+#        contentType: "application/json"
+#        schema: ${file(models/update-todo-model.json)}
+#        
+#      #- name: "UpdateTodoRequest2"
+#      #  schema:
+#      #    type: object
+#      #    required: 
+#      #      - name
+#      #      - dueDate
+#      #      - done
+#      #    properties:
+#      #      name:
+#      #        type: string
+#      #      dueDate:
+#      #        type: string
+#      #      done:
+#      #        type: boolean
 
 functions:
 
@@ -179,13 +180,13 @@ functions:
               application/json: ${file(models/create-todo-model.json)}
           reqValidatorName: 'RequestBodyValidator'
           
-          documentation:
-            summary: "Create todo"
-            description: "Create todo"
-            tags:
-              - "Data Creation"
-            requestModels:
-              "application/json": "CreateTodoRequest"
+          #documentation:
+          #  summary: "Create todo"
+          #  description: "Create todo"
+          #  tags:
+          #    - "Data Creation"
+          #  requestModels:
+          #    "application/json": "CreateTodoRequest"
     iamRoleStatements:
       - Effect: Allow
         Action:
@@ -206,14 +207,14 @@ functions:
             schemas:
               application/json: ${file(models/update-todo-model.json)}
           reqValidatorName: 'RequestBodyValidator'
-          
-          documentation:
-            summary: 'Update todo'
-            description: 'Update todo'
-            tags:
-              - "Data Update"
-            requestModels:
-              'application/json': 'UpdateTodoRequest'
+          #
+          #documentation:
+          #  summary: 'Update todo'
+          #  description: 'Update todo'
+          #  tags:
+          #    - "Data Update"
+          #  requestModels:
+          #    'application/json': 'UpdateTodoRequest'
     iamRoleStatements:
       - Effect: Allow
         Action:
